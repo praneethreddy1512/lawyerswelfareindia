@@ -41,10 +41,10 @@ export default function AdminLogin() {
               <ShieldCheck className="text-white" size={32} />
             </div>
             <h2 className="text-3xl font-bold text-gray-900 mb-2">
-              Admin Portal
+              Lawyer Welfare Admin Portal
             </h2>
             <p className="text-gray-600">
-              Sign in to access the administrative dashboard
+              Sign in to manage lawyer registrations, verifications & approvals
             </p>
           </div>
 
@@ -75,7 +75,7 @@ export default function AdminLogin() {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                  placeholder="admin@example.com"
+                  placeholder="admin@lawyerwelfare.org"
                 />
               </div>
             </div>
@@ -135,16 +135,16 @@ export default function AdminLogin() {
                   <span>Signing in...</span>
                 </>
               ) : (
-                "Sign In to Admin"
+                "Sign In"
               )}
             </button>
           </form>
 
           <div className="mt-6 pt-6 border-t border-gray-200">
             <p className="text-sm text-gray-600 text-center">
-              This portal is restricted to authorized administrators only.
-              <br />
-              If you need access, please contact the system administrator.
+              This portal is restricted to authorized officials of the
+              Lawyer Welfare Scheme. <br />
+              Contact the system administrator for access.
             </p>
           </div>
         </div>

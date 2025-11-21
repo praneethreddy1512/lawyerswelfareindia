@@ -70,7 +70,7 @@ function App() {
               }
             />
             <Route
-              path="/doctors"
+              path="/lawyers"
               element={
                 <ProtectedRoute>
                   <Doctors />
@@ -78,7 +78,7 @@ function App() {
               }
             />
             <Route
-              path="/deceased"
+              path="/demised"
               element={
                 <ProtectedRoute>
                   <Deceased />

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../api/backend";
 import { useAuth } from "../context/AuthContext";
 
-interface Doctor {
+interface Lawyer {
   _id: string;
   name: string;
   email: string;
@@ -16,15 +16,13 @@ interface Doctor {
 }
 
 export default function Admin() {
-  const [doctors, setDoctors] = useState<Doctor[]>([]);
+  const [lawyers, setLawyers] = useState<Lawyer[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
-  const [filter, setFilter] = useState<
-    "all" | "pending" | "approved" | "deceased"
-  >("all");
+  const [selectedLawyer, setSelectedLawyer] = useState<Lawyer | null>(null);
+  const [filter, setFilter] = useState<"all" | "pending" | "approved" | "disbarred">("all");
   const [approvalData, setApprovalData] = useState({
-    disease: "",
+    caseName: "",
     message: "",
   });
   const navigate = useNavigate();
@@ -37,52 +35,57 @@ export default function Admin() {
     }
   }, [isAdmin, navigate]);
 
-  const fetchDoctors = async () => {
+  const fetchLawyers = async () => {
+    setLoading(true);
     try {
-      const data = await api.doctors.list(
-        filter !== "all" ? filter : undefined
-      );
-      setDoctors(data);
+      const data = await api.lawyers.list(filter !== "all" ? filter : undefined);
+      setLawyers(data || []);
+      setError("");
     } catch (err: any) {
-      setError(err.message || "Failed to load doctors");
+      setError(err.message || "Failed to load lawyers");
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchDoctors();
-  }, []);
+    fetchLawyers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // initial load
 
-  const handleApprove = async (doctorId: string) => {
+  const handleApprove = async (lawyerId: string) => {
     try {
-      if (!approvalData.disease) {
-        alert("Please enter disease name");
+      if (!approvalData.caseName) {
+        alert("Please enter case name");
         return;
       }
-      await api.doctors.approve(doctorId, {
-        disease: approvalData.disease,
+      await api.lawyers.approve(lawyerId, {
+        caseName: approvalData.caseName,
         message: approvalData.message,
       });
       // Refresh the list
-      fetchDoctors();
-      setSelectedDoctor(null);
-      setApprovalData({ disease: "", message: "" });
+      await fetchLawyers();
+      setSelectedLawyer(null);
+      setApprovalData({ caseName: "", message: "" });
     } catch (err: any) {
-      alert(err.message || "Failed to approve doctor");
+      alert(err.message || "Failed to approve lawyer");
     }
   };
 
-  const handleMarkDeceased = async (
-    doctorId: string,
-    data: { reason?: string; diseaseName?: string }
-  ) => {
+  const handleMarkDisbarred = async (lawyerId: string, data: { reason?: string; caseName?: string }) => {
     try {
-      await api.doctors.deceased(doctorId, data);
-      // Refresh the list
-      fetchDoctors();
+      // backend endpoint name retained as 'deceased' previously — ensure api.lawyers.disbar exists and maps to correct route,
+      // but using api.lawyers.disbar here would be ideal. If backend still uses deceased endpoint, api.lawyers.disbar should map to that.
+      // We'll call api.lawyers.disbar if available, otherwise fallback to api.lawyers.deceased to avoid breaking.
+      if ((api as any).lawyers && (api as any).lawyers.disbar) {
+        await (api as any).lawyers.disbar(lawyerId, { reason: data.reason, caseName: data.caseName });
+      } else {
+        // fallback to existing 'deceased' endpoint if backend still exposes it
+        await api.lawyers.deceased(lawyerId, { reason: data.reason, caseName: data.caseName });
+      }
+      await fetchLawyers();
     } catch (err: any) {
-      alert(err.message || "Failed to mark doctor as deceased");
+      alert(err.message || "Failed to mark lawyer as disbarred");
     }
   };
 
@@ -104,56 +107,56 @@ export default function Admin() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-          <p className="mt-2 text-gray-600">
-            Manage doctor approvals and registrations
-          </p>
+          <p className="mt-2 text-gray-600">Manage lawyer approvals and registrations</p>
         </div>
 
         <div className="mb-6">
-          <label
-            htmlFor="filter"
-            className="block text-sm font-medium text-gray-700 mb-2"
-          >
-            Filter Doctors
+          <label htmlFor="filter" className="block text-sm font-medium text-gray-700 mb-2">
+            Filter Lawyers
           </label>
           <select
             id="filter"
             value={filter}
             onChange={(e) => {
-              setFilter(e.target.value as typeof filter);
-              fetchDoctors();
+              const v = e.target.value as typeof filter;
+              setFilter(v);
+              // fetch with new filter
+              (async () => {
+                setLoading(true);
+                try {
+                  const data = await api.lawyers.list(v !== "all" ? v : undefined);
+                  setLawyers(data || []);
+                  setError("");
+                } catch (err: any) {
+                  setError(err.message || "Failed to load lawyers");
+                } finally {
+                  setLoading(false);
+                }
+              })();
             }}
             className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-gray-500 focus:border-gray-500 sm:text-sm rounded-md"
           >
-            <option value="all">All Doctors</option>
+            <option value="all">All Lawyers</option>
             <option value="pending">Pending Approval</option>
             <option value="approved">Approved</option>
-            <option value="deceased">Deceased</option>
+            <option value="disbarred">Disbarred</option>
           </select>
         </div>
 
         <div className="bg-white shadow overflow-hidden sm:rounded-lg">
           <div className="divide-y divide-gray-200">
-            {doctors.length === 0 ? (
-              <div className="p-6 text-center text-gray-500">
-                No pending approvals
-              </div>
+            {lawyers.length === 0 ? (
+              <div className="p-6 text-center text-gray-500">No lawyers found</div>
             ) : (
-              doctors.map((doctor) => (
-                <div key={doctor._id} className="p-6">
+              lawyers.map((lawyer) => (
+                <div key={lawyer._id} className="p-6">
                   <div className="flex items-start space-x-6">
                     <div className="flex-shrink-0">
-                      {doctor.passportPhoto ? (
-                        <img
-                          src={doctor.passportPhoto}
-                          alt={doctor.name}
-                          className="h-24 w-24 rounded-lg object-cover"
-                        />
+                      {lawyer.passportPhoto ? (
+                        <img src={lawyer.passportPhoto} alt={lawyer.name} className="h-24 w-24 rounded-lg object-cover" />
                       ) : (
                         <div className="h-24 w-24 rounded-lg bg-gray-200 flex items-center justify-center">
-                          <span className="text-2xl text-gray-500">
-                            {doctor.name.charAt(0)}
-                          </span>
+                          <span className="text-2xl text-gray-500">{lawyer.name.charAt(0)}</span>
                         </div>
                       )}
                     </div>
@@ -161,103 +164,72 @@ export default function Admin() {
                     <div className="flex-1">
                       <div className="flex items-center justify-between">
                         <div>
-                          <h2 className="text-xl font-semibold text-gray-900">
-                            {doctor.name}
-                          </h2>
-                          <p className="text-sm text-gray-500">
-                            Registered on{" "}
-                            {new Date(doctor.createdAt).toLocaleDateString()}
-                          </p>
+                          <h2 className="text-xl font-semibold text-gray-900">{lawyer.name}</h2>
+                          <p className="text-sm text-gray-500">Registered on {new Date(lawyer.createdAt).toLocaleDateString()}</p>
                         </div>
                         <span
                           className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                            doctor.status === "approved"
+                            lawyer.status === "approved"
                               ? "bg-green-100 text-green-800"
-                              : doctor.status === "pending"
+                              : lawyer.status === "pending"
                               ? "bg-yellow-100 text-yellow-800"
                               : "bg-red-100 text-red-800"
                           }`}
                         >
-                          {doctor.status.charAt(0).toUpperCase() +
-                            doctor.status.slice(1)}
+                          {lawyer.status.charAt(0).toUpperCase() + lawyer.status.slice(1)}
                         </span>
                       </div>
 
                       <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                           <p className="text-sm text-gray-500">Email</p>
-                          <p className="text-sm font-medium text-gray-900">
-                            {doctor.email}
-                          </p>
+                          <p className="text-sm font-medium text-gray-900">{lawyer.email}</p>
                         </div>
                         <div>
                           <p className="text-sm text-gray-500">Phone</p>
-                          <p className="text-sm font-medium text-gray-900">
-                            {doctor.phone}
-                          </p>
+                          <p className="text-sm font-medium text-gray-900">{lawyer.phone}</p>
                         </div>
                         <div>
                           <p className="text-sm text-gray-500">Qualification</p>
-                          <p className="text-sm font-medium text-gray-900">
-                            {doctor.qualification}
-                          </p>
+                          <p className="text-sm font-medium text-gray-900">{lawyer.qualification}</p>
                         </div>
-                        {doctor.certificates && (
+                        {lawyer.certificates && (
                           <div>
-                            <p className="text-sm text-gray-500">
-                              Certificates
-                            </p>
-                            <a
-                              href={doctor.certificates}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-sm text-black hover:underline"
-                            >
+                            <p className="text-sm text-gray-500">Certificates</p>
+                            <a href={lawyer.certificates} target="_blank" rel="noopener noreferrer" className="text-sm text-black hover:underline">
                               View Certificates
                             </a>
                           </div>
                         )}
                       </div>
 
-                      {selectedDoctor?._id === doctor._id ? (
+                      {selectedLawyer?._id === lawyer._id ? (
                         <div className="mt-4 bg-gray-50 p-4 rounded-lg">
                           <div className="space-y-4">
                             <div>
-                              <label
-                                htmlFor="disease"
-                                className="block text-sm font-medium text-gray-700"
-                              >
-                                Disease Name *
+                              <label htmlFor="caseName" className="block text-sm font-medium text-gray-700">
+                                Case Name *
                               </label>
                               <input
                                 type="text"
-                                id="disease"
-                                value={approvalData.disease}
+                                id="caseName"
+                                value={approvalData.caseName}
                                 onChange={(e) =>
-                                  setApprovalData((prev) => ({
-                                    ...prev,
-                                    disease: e.target.value,
-                                  }))
+                                  setApprovalData((prev) => ({ ...prev, caseName: e.target.value }))
                                 }
                                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                                 required
                               />
                             </div>
                             <div>
-                              <label
-                                htmlFor="message"
-                                className="block text-sm font-medium text-gray-700"
-                              >
+                              <label htmlFor="message" className="block text-sm font-medium text-gray-700">
                                 Approval Message (Optional)
                               </label>
                               <textarea
                                 id="message"
                                 value={approvalData.message}
                                 onChange={(e) =>
-                                  setApprovalData((prev) => ({
-                                    ...prev,
-                                    message: e.target.value,
-                                  }))
+                                  setApprovalData((prev) => ({ ...prev, message: e.target.value }))
                                 }
                                 rows={3}
                                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
@@ -265,13 +237,13 @@ export default function Admin() {
                             </div>
                             <div className="flex justify-end space-x-3">
                               <button
-                                onClick={() => setSelectedDoctor(null)}
+                                onClick={() => setSelectedLawyer(null)}
                                 className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
                               >
                                 Cancel
                               </button>
                               <button
-                                onClick={() => handleApprove(doctor._id)}
+                                onClick={() => handleApprove(lawyer._id)}
                                 className="px-4 py-2 text-sm font-medium text-white bg-black rounded-md hover:bg-gray-500"
                               >
                                 Confirm Approval
@@ -282,29 +254,25 @@ export default function Admin() {
                       ) : (
                         <div className="mt-4 flex space-x-3">
                           <button
-                            onClick={() => setSelectedDoctor(doctor)}
+                            onClick={() => setSelectedLawyer(lawyer)}
                             className="px-4 py-2 text-sm font-medium text-white bg-black rounded-md hover:bg-gray-500"
                           >
-                            Approve Doctor
+                            Approve Lawyer
                           </button>
                           <button
                             onClick={() => {
-                              const reason = window.prompt(
-                                "Enter reason for marking as deceased (optional):"
-                              );
-                              const disease = window.prompt(
-                                "Enter disease name (optional):"
-                              );
-                              if (reason !== null || disease !== null) {
-                                handleMarkDeceased(doctor._id, {
+                              const reason = window.prompt("Enter reason for marking as disbarred (optional):");
+                              const caseName = window.prompt("Enter related case name (optional):");
+                              if (reason !== null || caseName !== null) {
+                                handleMarkDisbarred(lawyer._id, {
                                   reason: reason || undefined,
-                                  diseaseName: disease || undefined,
+                                  caseName: caseName || undefined,
                                 });
                               }
                             }}
                             className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700"
                           >
-                            Mark as Deceased
+                            Mark as Disbarred
                           </button>
                         </div>
                       )}

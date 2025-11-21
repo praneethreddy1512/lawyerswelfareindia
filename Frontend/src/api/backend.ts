@@ -104,57 +104,18 @@ export const api = {
         body: form,
       }),
 
-    // caseType here maps to the backend lawyerRoutes.js expectation
-    approve: (id: string, payload: { caseType: string; message?: string }) =>
+    approve: (id: string, payload: { caseName: string; message?: string }) =>
       request(`/api/lawyers/${id}/approve`, {
         method: 'PATCH',
         headers: buildHeaders(true),
         body: JSON.stringify(payload),
       }),
 
-    // caseType here maps to deceasedCase on the backend
-    deceased: (id: string, payload: { reason?: string; caseType?: string }) =>
+    deceased: (id: string, payload: { reason?: string; caseName?: string }) =>
       request(`/api/lawyers/${id}/deceased`, {
         method: 'POST',
         headers: buildHeaders(true),
         body: JSON.stringify(payload),
-      }),
-  },
-
-  /**
-   * Alias layer to keep existing "doctors" pages working while
-   * the backend uses "lawyers" routes and field names.
-   */
-  doctors: {
-    register: (form: FormData) => api.lawyers.register(form),
-
-    login: (payload: { email: string; password: string }) =>
-      api.lawyers.login(payload),
-
-    list: (status?: string) => api.lawyers.list(status),
-
-    get: (id: string) => api.lawyers.get(id),
-
-    updateProfile: (id: string, form: FormData) =>
-      api.lawyers.updateProfile(id, form),
-
-    update: (id: string, form: FormData) => api.lawyers.update(id, form),
-
-    // Frontend Admin page passes { disease, message }
-    approve: (id: string, payload: { disease: string; message?: string }) =>
-      api.lawyers.approve(id, {
-        caseType: payload.disease,
-        message: payload.message,
-      }),
-
-    // Frontend Admin page passes { reason?, diseaseName? }
-    deceased: (
-      id: string,
-      payload: { reason?: string; diseaseName?: string }
-    ) =>
-      api.lawyers.deceased(id, {
-        reason: payload.reason,
-        caseType: payload.diseaseName,
       }),
   },
 };

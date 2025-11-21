@@ -13,8 +13,8 @@ interface Doctor {
   passportPhoto: string;
   certificates: string;
   houseAddress: string;
-  // Backend model + routes use officeAddress for the lawyer's work address
-  officeAddress: string;
+  officeAddress: string; // Lawyer's office/work address
+
   nominee: {
     name: string;
     age: string;
@@ -25,6 +25,7 @@ interface Doctor {
     ifscCode: string;
     bankHolderName: string;
   };
+
   familyMember1?: {
     name: string;
     age: string;
@@ -33,6 +34,7 @@ interface Doctor {
     mobile: string;
     address: string;
   };
+
   familyMember2?: {
     name: string;
     age: string;
@@ -50,6 +52,7 @@ export default function Profile() {
   const [successMessage, setSuccessMessage] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [files, setFiles] = useState<{
     passportPhoto: File | null;
     certificates: File | null;
@@ -67,7 +70,7 @@ export default function Profile() {
           return;
         }
 
-        // Get user ID from token payload
+        // Get user ID from token
         const payload = JSON.parse(atob(token.split(".")[1]));
         const userId = payload.id;
 
@@ -76,11 +79,11 @@ export default function Profile() {
           return;
         }
 
-        // Use the specific doctor endpoint
-        const data = await api.doctors.get(userId);
+        // Fetch lawyer profile
+        const data = await api.lawyers.get(userId);
         setDoctor(data);
 
-        // Store userId for future use
+        // Save user ID for future use
         localStorage.setItem("userId", userId);
       } catch (err: any) {
         setError(err.message || "Failed to load profile");
@@ -105,11 +108,13 @@ export default function Profile() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!doctor) return;
+
     setError("");
     setIsSubmitting(true);
 
     try {
       const formData = new FormData();
+
       if (files.passportPhoto) {
         formData.append("passportPhoto", files.passportPhoto);
       }
@@ -117,7 +122,6 @@ export default function Profile() {
         formData.append("certificates", files.certificates);
       }
 
-      // Get all the form data
       const form = e.target as HTMLFormElement;
       const formElements = form.elements as any;
 
@@ -130,7 +134,6 @@ export default function Profile() {
         "alternateMobile",
         "email",
         "houseAddress",
-        // send officeAddress so it is persisted correctly on the backend
         "officeAddress",
       ];
 
@@ -140,30 +143,27 @@ export default function Profile() {
         }
       });
 
-      // Get all nominee details
+      // Nominee details
       const nomineeBankAccount = formElements.nomineeBankAccount.value;
       const nomineeBankAccountConfirm =
         formElements.nomineeBankAccountConfirm.value;
       const nomineeIFSC = formElements.nomineeIFSC.value;
       const nomineeBankHolder = formElements.nomineeBankHolder.value;
 
-      // Always validate bank details
-      if (!nomineeBankAccount || !nomineeIFSC || !nomineeBankHolder) {
-        setError(
-          "Nominee bank details are required. Please fill in all bank fields."
-        );
+      if (
+        !nomineeBankAccount ||
+        !nomineeIFSC ||
+        !nomineeBankHolder
+      ) {
+        setError("Nominee bank details are required");
         return;
       }
 
-      // Validate bank account confirmation
       if (nomineeBankAccount !== nomineeBankAccountConfirm) {
-        setError(
-          "Bank account numbers do not match. Please verify and try again."
-        );
+        setError("Bank account numbers do not match");
         return;
       }
 
-      // Create nominee object with all details
       const nominee = {
         name: formElements.nomineeName.value || doctor.nominee?.name,
         age: formElements.nomineeAge.value || doctor.nominee?.age,
@@ -171,21 +171,23 @@ export default function Profile() {
         email: formElements.nomineeEmail.value || doctor.nominee?.email,
         phone: formElements.nomineePhone.value || doctor.nominee?.phone,
         bankAccountNumber: nomineeBankAccount,
-        confirmBankAccountNumber: nomineeBankAccountConfirm, // This will be removed by backend
+        confirmBankAccountNumber: nomineeBankAccountConfirm,
         ifscCode: nomineeIFSC,
         bankHolderName: nomineeBankHolder,
       };
 
       formData.append("nominee", JSON.stringify(nominee));
 
-      await api.doctors.updateProfile(doctor._id, formData);
-      // Refresh the data after successful update
-      const updatedData = await api.doctors.get(doctor._id);
+      await api.lawyers.updateProfile(doctor._id, formData);
+
+      const updatedData = await api.lawyers.get(doctor._id);
       setDoctor(updatedData);
+
       setSuccessMessage("Profile updated successfully");
       setTimeout(() => setSuccessMessage(""), 3000);
-      setError(""); // Clear any existing errors
-      setIsEditing(false); // Exit edit mode
+
+      setError("");
+      setIsEditing(false);
       setIsSubmitting(false);
     } catch (err: any) {
       setError(err.message || "Failed to update profile");
@@ -199,12 +201,14 @@ export default function Profile() {
         Loading...
       </div>
     );
+
   if (error)
     return (
       <div className="min-h-screen flex items-center justify-center text-red-600">
         {error}
       </div>
     );
+
   if (!doctor)
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -221,12 +225,14 @@ export default function Profile() {
               Welcome, <span className="text-black">{doctor.name}</span>! 👋
             </h1>
             <p className="text-gray-600 mt-2">
-              View and manage your profile information
+              View and manage your professional lawyer profile
             </p>
           </div>
 
           <div className="mb-6 flex justify-between items-center">
-            <h2 className="text-2xl font-semibold text-gray-900">My Profile</h2>
+            <h2 className="text-2xl font-semibold text-gray-900">
+              My Lawyer Profile
+            </h2>
             <button
               type="button"
               onClick={() => setIsEditing(!isEditing)}
@@ -249,114 +255,98 @@ export default function Profile() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-8">
-            {/* Personal Information */}
+            {/* PERSONAL INFO */}
             <div className="space-y-6">
               <h2 className="text-xl font-semibold text-gray-900">
                 Personal Information
               </h2>
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                {/* Name */}
                 <div>
-                  <label
-                    htmlFor="name"
-                    className="block text-sm font-medium text-gray-700"
-                  >
+                  <label className="block text-sm font-medium text-gray-700">
                     Full Name
                   </label>
                   <input
                     type="text"
-                    id="name"
                     name="name"
                     defaultValue={doctor.name}
-                    className={`mt-1 block w-full rounded-lg shadow-sm p-2 ${
+                    disabled={!isEditing}
+                    className={`mt-1 block w-full rounded-lg p-2 ${
                       isEditing
                         ? "border border-gray-300 bg-white"
                         : "border-none bg-gray-50"
                     }`}
-                    disabled={!isEditing}
                   />
                 </div>
 
+                {/* Email */}
                 <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-medium text-gray-700"
-                  >
+                  <label className="block text-sm font-medium text-gray-700">
                     Email
                   </label>
                   <input
                     type="email"
-                    id="email"
                     name="email"
                     defaultValue={doctor.email}
-                    className="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm p-2"
                     disabled={!isEditing}
+                    className="mt-1 block w-full border border-gray-300 rounded-lg p-2"
                   />
                 </div>
 
+                {/* Phone */}
                 <div>
-                  <label
-                    htmlFor="phone"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Phone
+                  <label className="block text-sm font-medium text-gray-700">
+                    Mobile Number
                   </label>
                   <input
                     type="tel"
-                    id="phone"
                     name="phone"
                     defaultValue={doctor.phone}
-                    className="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm p-2"
                     disabled={!isEditing}
+                    className="mt-1 block w-full border border-gray-300 rounded-lg p-2"
                   />
                 </div>
 
+                {/* Alternate */}
                 <div>
-                  <label
-                    htmlFor="alternateMobile"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Alternate Mobile
+                  <label className="block text-sm font-medium text-gray-700">
+                    Alternate Mobile Number
                   </label>
                   <input
                     type="tel"
-                    id="alternateMobile"
                     name="alternateMobile"
                     defaultValue={doctor.alternateMobile}
-                    className="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm p-2"
                     disabled={!isEditing}
+                    className="mt-1 block w-full border border-gray-300 rounded-lg p-2"
                   />
                 </div>
 
+                {/* Age */}
                 <div>
-                  <label
-                    htmlFor="age"
-                    className="block text-sm font-medium text-gray-700"
-                  >
+                  <label className="block text-sm font-medium text-gray-700">
                     Age
                   </label>
                   <input
                     type="number"
-                    id="age"
                     name="age"
                     defaultValue={doctor.age}
-                    className="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm p-2"
                     disabled={!isEditing}
+                    className="mt-1 block w-full border border-gray-300 rounded-lg p-2"
                   />
                 </div>
 
+                {/* Gender */}
                 <div>
-                  <label
-                    htmlFor="sex"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Sex
+                  <label className="block text-sm font-medium text-gray-700">
+                    Gender
                   </label>
                   <select
-                    id="sex"
                     name="sex"
                     defaultValue={doctor.sex}
-                    className="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm p-2"
                     disabled={!isEditing}
+                    className="mt-1 block w-full border border-gray-300 rounded-lg p-2"
                   >
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
@@ -366,14 +356,20 @@ export default function Profile() {
               </div>
             </div>
 
-            {/* Documents */}
+            {/* DOCUMENTS */}
             <div className="space-y-6">
-              <h2 className="text-xl font-semibold text-gray-900">Documents</h2>
+              <h2 className="text-xl font-semibold text-gray-900">
+                Documents
+              </h2>
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                {/* Passport Photo */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
                     Current Passport Photo
                   </label>
+
                   {doctor.passportPhoto && (
                     <img
                       src={doctor.passportPhoto}
@@ -381,47 +377,49 @@ export default function Profile() {
                       className="mt-2 h-32 w-32 object-cover rounded-lg"
                     />
                   )}
+
                   {isEditing && (
-                    <div className="mt-2">
+                    <div className="mt-3">
                       <label className="block text-sm font-medium text-gray-700">
-                        Update Passport Photo
+                        Upload New Passport Photo
                       </label>
                       <input
                         type="file"
                         name="passportPhoto"
                         accept="image/*"
                         onChange={handleFileChange}
-                        className="mt-1"
                       />
                     </div>
                   )}
                 </div>
 
+                {/* Certificates */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
-                    Current Certificates
+                    Law Certificates / Bar Council Proof
                   </label>
+
                   {doctor.certificates && (
                     <a
                       href={doctor.certificates}
                       target="_blank"
-                      rel="noopener noreferrer"
+                      rel="noreferrer"
                       className="mt-2 inline-block text-black hover:underline"
                     >
                       View Current Certificates
                     </a>
                   )}
+
                   {isEditing && (
-                    <div className="mt-2">
+                    <div className="mt-3">
                       <label className="block text-sm font-medium text-gray-700">
-                        Update Certificates
+                        Upload New Certificates
                       </label>
                       <input
                         type="file"
                         name="certificates"
                         accept=".pdf,.jpg,.jpeg,.png"
                         onChange={handleFileChange}
-                        className="mt-1"
                       />
                     </div>
                   )}
@@ -429,210 +427,181 @@ export default function Profile() {
               </div>
             </div>
 
-            {/* Addresses */}
+            {/* ADDRESSES */}
             <div className="space-y-6">
-              <h2 className="text-xl font-semibold text-gray-900">Addresses</h2>
+              <h2 className="text-xl font-semibold text-gray-900">
+                Addresses
+              </h2>
+
               <div className="grid grid-cols-1 gap-6">
+
+                {/* Home Address */}
                 <div>
-                  <label
-                    htmlFor="houseAddress"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    House Address
+                  <label className="block text-sm font-medium text-gray-700">
+                    Residential Address
                   </label>
                   <textarea
-                    id="houseAddress"
                     name="houseAddress"
                     rows={3}
                     defaultValue={doctor.houseAddress}
-                    className="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm p-2"
                     disabled={!isEditing}
+                    className="mt-1 block w-full border border-gray-300 rounded-lg p-2"
                   />
                 </div>
 
+                {/* Office */}
                 <div>
-                  <label
-                    htmlFor="officeAddress"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Office Address
+                  <label className="block text-sm font-medium text-gray-700">
+                    Law Office / Chamber Address
                   </label>
                   <textarea
-                    id="officeAddress"
                     name="officeAddress"
                     rows={3}
                     defaultValue={doctor.officeAddress}
-                    className="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm p-2"
                     disabled={!isEditing}
+                    className="mt-1 block w-full border border-gray-300 rounded-lg p-2"
                   />
                 </div>
               </div>
             </div>
 
-            {/* Nominee Details */}
+            {/* NOMINEE DETAILS */}
             <div className="space-y-6">
               <h2 className="text-xl font-semibold text-gray-900">
                 Nominee Details
               </h2>
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                {/* Nominee Name */}
                 <div>
-                  <label
-                    htmlFor="nomineeName"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Name
+                  <label className="block text-sm font-medium text-gray-700">
+                    Nominee Full Name
                   </label>
                   <input
                     type="text"
-                    id="nomineeName"
                     name="nomineeName"
                     defaultValue={doctor.nominee?.name}
-                    className="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm p-2"
                     disabled={!isEditing}
+                    className="mt-1 block w-full border border-gray-300 rounded-lg p-2"
                   />
                 </div>
 
+                {/* Age */}
                 <div>
-                  <label
-                    htmlFor="nomineeAge"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Age
+                  <label className="block text-sm font-medium text-gray-700">
+                    Nominee Age
                   </label>
                   <input
                     type="number"
-                    id="nomineeAge"
                     name="nomineeAge"
                     defaultValue={doctor.nominee?.age}
-                    className="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm p-2"
                     disabled={!isEditing}
+                    className="mt-1 block w-full border border-gray-300 rounded-lg p-2"
                   />
                 </div>
 
+                {/* Sex */}
                 <div>
-                  <label
-                    htmlFor="nomineeSex"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Sex
+                  <label className="block text-sm font-medium text-gray-700">
+                    Gender
                   </label>
                   <select
-                    id="nomineeSex"
                     name="nomineeSex"
                     defaultValue={doctor.nominee?.sex}
-                    className="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm p-2"
                     disabled={!isEditing}
+                    className="mt-1 block w-full border border-gray-300 rounded-lg p-2"
                   >
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                    <option value="Other">Other</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                    <option>Other</option>
                   </select>
                 </div>
 
+                {/* Email */}
                 <div>
-                  <label
-                    htmlFor="nomineeEmail"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Email
+                  <label className="block text-sm font-medium text-gray-700">
+                    Nominee Email
                   </label>
                   <input
                     type="email"
-                    id="nomineeEmail"
                     name="nomineeEmail"
                     defaultValue={doctor.nominee?.email}
-                    className="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm p-2"
                     disabled={!isEditing}
+                    className="mt-1 block w-full border border-gray-300 rounded-lg p-2"
                   />
                 </div>
 
+                {/* Phone */}
                 <div>
-                  <label
-                    htmlFor="nomineePhone"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Phone
+                  <label className="block text-sm font-medium text-gray-700">
+                    Nominee Phone Number
                   </label>
                   <input
                     type="tel"
-                    id="nomineePhone"
                     name="nomineePhone"
                     defaultValue={doctor.nominee?.phone}
-                    className="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm p-2"
                     disabled={!isEditing}
+                    className="mt-1 block w-full border border-gray-300 rounded-lg p-2"
                   />
                 </div>
 
+                {/* Bank Account */}
                 <div>
-                  <label
-                    htmlFor="nomineeBankAccount"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Bank Account Number <span className="text-red-500">*</span>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Bank Account Number *
                   </label>
                   <input
                     type="text"
-                    id="nomineeBankAccount"
                     name="nomineeBankAccount"
                     defaultValue={doctor.nominee?.bankAccountNumber}
                     required
-                    className="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm p-2"
                     disabled={!isEditing}
+                    className="mt-1 block w-full border border-gray-300 rounded-lg p-2"
                   />
                 </div>
 
+                {/* Confirm */}
                 <div>
-                  <label
-                    htmlFor="nomineeBankAccountConfirm"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Confirm Bank Account Number{" "}
-                    <span className="text-red-500">*</span>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Confirm Bank Account Number *
                   </label>
                   <input
                     type="text"
-                    id="nomineeBankAccountConfirm"
                     name="nomineeBankAccountConfirm"
                     required
-                    className="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm p-2"
                     disabled={!isEditing}
+                    className="mt-1 block w-full border border-gray-300 rounded-lg p-2"
                   />
                 </div>
 
+                {/* IFSC */}
                 <div>
-                  <label
-                    htmlFor="nomineeIFSC"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    IFSC Code <span className="text-red-500">*</span>
+                  <label className="block text-sm font-medium text-gray-700">
+                    IFSC Code *
                   </label>
                   <input
                     type="text"
-                    id="nomineeIFSC"
                     name="nomineeIFSC"
                     defaultValue={doctor.nominee?.ifscCode}
                     required
-                    className="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm p-2"
                     disabled={!isEditing}
+                    className="mt-1 block w-full border border-gray-300 rounded-lg p-2"
                   />
                 </div>
 
+                {/* Bank Holder Name */}
                 <div>
-                  <label
-                    htmlFor="nomineeBankHolder"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Bank Account Holder Name{" "}
-                    <span className="text-red-500">*</span>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Bank Account Holder Name *
                   </label>
                   <input
                     type="text"
-                    id="nomineeBankHolder"
                     name="nomineeBankHolder"
                     defaultValue={doctor.nominee?.bankHolderName}
                     required
-                    className="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm p-2"
                     disabled={!isEditing}
+                    className="mt-1 block w-full border border-gray-300 rounded-lg p-2"
                   />
                 </div>
               </div>

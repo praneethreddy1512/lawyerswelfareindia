@@ -48,7 +48,7 @@ export default function Contact() {
       <section className="bg-gradient-to-br from-black to-gray-700 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">Contact Us</h1>
-            <p className="text-xl text-white max-w-3xl">
+          <p className="text-xl text-white max-w-3xl">
             Get in touch with our team for any questions, support, or assistance
           </p>
         </div>
@@ -77,7 +77,7 @@ export default function Contact() {
                       Our Office
                     </h3>
                     <p className="text-gray-600">
-                      123 Healthcare Avenue
+                      123 lawyers Avenue
                       <br />
                       Medical District
                       <br />
@@ -103,8 +103,12 @@ export default function Contact() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900 mb-1">Email</h3>
-                    <p className="text-gray-600">lawyerwelfareindia@gmail.com</p>
-                    <p className="text-gray-600">lawyerwelfareindia@gmail.com</p>
+                    <p className="text-gray-600">
+                      lawyerwelfareindia@gmail.com
+                    </p>
+                    <p className="text-gray-600">
+                      lawyerwelfareindia@gmail.com
+                    </p>
                   </div>
                 </div>
 
@@ -270,7 +274,7 @@ export default function Contact() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
                 href="tel:+15551234567"
-className="bg-white text-black px-8 py-3 rounded-lg font-semibold 
+                className="bg-white text-black px-8 py-3 rounded-lg font-semibold 
            border border-white 
            hover:bg-transparent hover:text-white 
            transition-colors"

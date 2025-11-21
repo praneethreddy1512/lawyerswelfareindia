@@ -95,9 +95,9 @@ export default function JoinNow(): JSX.Element {
 
     if (type === "checkbox") {
       const target = e.target as HTMLInputElement;
-      setFormData({ ...formData, [name]: target.checked } as FormDataState);
+      setFormData({ ...formData, [name]: target.checked } as any);
     } else {
-      setFormData({ ...formData, [name]: value } as FormDataState);
+      setFormData({ ...formData, [name]: value } as any);
     }
 
     if (errors[name]) {
@@ -108,7 +108,7 @@ export default function JoinNow(): JSX.Element {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, files } = e.target;
     if (files && files[0]) {
-      setFormData({ ...formData, [name]: files[0] } as FormDataState);
+      setFormData({ ...formData, [name]: files[0] } as any);
       if (errors[name]) {
         setErrors({ ...errors, [name]: "" });
       }
@@ -272,9 +272,9 @@ export default function JoinNow(): JSX.Element {
       setTimeout(() => {
         navigate("/login");
       }, 2000);
-      } catch (err: unknown) {
+    } catch (err: any) {
       console.error("Registration error", err);
-      alert((err as { message?: string })?.message || "Failed to submit application");
+      alert(err?.message || "Failed to submit application");
       setIsSubmitting(false);
     }
   };
@@ -303,7 +303,7 @@ export default function JoinNow(): JSX.Element {
             <div className="space-y-4">
               <a
                 href="/"
-                className="inline-block bg-white text-black px-8 py-3 rounded-lg font-semibold hover:bg-transparent hover:text-white border border-white transition-colors text-lg"
+                className="inline-block bg-black text-white px-8 py-3 rounded-lg font-semibold hover:bg-gray-500 transition-colors"
               >
                 Return to Home
               </a>
@@ -316,10 +316,10 @@ export default function JoinNow(): JSX.Element {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <section className="bg-gradient-to-br from-black to-gray-700 text-white py-16">
+      <section className="bg-gradient-to-br from-black to-gray-700  text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">Join Lawyer Welfare India</h1>
-          <p className="text-xl text-white max-w-3xl">Complete the registration form below to become a member</p>
+          <p className="text-xl text-blue-100 max-w-3xl">Complete the registration form below to become a member</p>
         </div>
       </section>
 
@@ -340,7 +340,7 @@ export default function JoinNow(): JSX.Element {
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  className={`w-full px-4 py-2 border ${errors.name ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent`}
+                  className={`w-full px-4 py-2 border ${errors.name ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
                 />
                 {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
               </div>
@@ -353,14 +353,14 @@ export default function JoinNow(): JSX.Element {
                   name="age"
                   value={formData.age}
                   onChange={handleChange}
-                  className={`w-full px-4 py-2 border ${errors.age ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent`}
+                  className={`w-full px-4 py-2 border ${errors.age ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
                 />
                 {errors.age && <p className="text-red-500 text-sm mt-1">{errors.age}</p>}
               </div>
 
               <div>
                 <label htmlFor="sex" className="block text-sm font-medium text-gray-700 mb-2">Sex *</label>
-                <select id="sex" name="sex" value={formData.sex} onChange={handleChange} className={`w-full px-4 py-2 border ${errors.sex ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent`}>
+                <select id="sex" name="sex" value={formData.sex} onChange={handleChange} className={`w-full px-4 py-2 border ${errors.sex ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent`}>
                   <option value="">Select</option>
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
@@ -371,7 +371,7 @@ export default function JoinNow(): JSX.Element {
 
               <div>
                 <label htmlFor="qualification" className="block text-sm font-medium text-gray-700 mb-2">Qualification *</label>
-                <select id="qualification" name="qualification" value={formData.qualification} onChange={handleChange} className={`w-full px-4 py-2 border ${errors.qualification ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent`}>
+                <select id="qualification" name="qualification" value={formData.qualification} onChange={handleChange} className={`w-full px-4 py-2 border ${errors.qualification ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent`}>
                   <option value="">Select</option>
                   <option value="Advocate">Advocate</option>
                   <option value="Senior Advocate">Senior Advocate</option>
@@ -384,24 +384,24 @@ export default function JoinNow(): JSX.Element {
 
               <div>
                 <label htmlFor="mobile" className="block text-sm font-medium text-gray-700 mb-2">Mobile Number *</label>
-                <input type="tel" id="mobile" name="mobile" value={formData.mobile} onChange={handleChange} className={`w-full px-4 py-2 border ${errors.mobile ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent`} />
+                <input type="tel" id="mobile" name="mobile" value={formData.mobile} onChange={handleChange} className={`w-full px-4 py-2 border ${errors.mobile ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent`} />
                 {errors.mobile && <p className="text-red-500 text-sm mt-1">{errors.mobile}</p>}
               </div>
 
               <div>
                 <label htmlFor="alternateMobile" className="block text-sm font-medium text-gray-700 mb-2">Alternate Mobile Number</label>
-                <input type="tel" id="alternateMobile" name="alternateMobile" value={formData.alternateMobile} onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent" />
+                <input type="tel" id="alternateMobile" name="alternateMobile" value={formData.alternateMobile} onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
               </div>
 
               <div className="md:col-span-2">
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">Email Address *</label>
-                <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} className={`w-full px-4 py-2 border ${errors.email ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent`} />
+                <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} className={`w-full px-4 py-2 border ${errors.email ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent`} />
                 {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
               </div>
 
               <div className="md:col-span-2">
                 <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">Password *</label>
-                <input type="password" id="password" name="password" placeholder="Create a secure password" value={formData.password} onChange={handleChange} className={`w-full px-4 py-2 border ${errors.password ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent`} />
+                <input type="password" id="password" name="password" placeholder="Create a secure password" value={formData.password} onChange={handleChange} className={`w-full px-4 py-2 border ${errors.password ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent`} />
                 {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
               </div>
             </div>
@@ -422,7 +422,7 @@ export default function JoinNow(): JSX.Element {
                 </div>
 
                 <div>
-                  <label htmlFor="certificates" className="block text-sm font-medium text-gray-700 mb-2">Law Certificates*</label>
+                  <label htmlFor="certificates" className="block text-sm font-medium text-gray-700 mb-2">Law Certificates *</label>
                   <div className="relative">
                     <input type="file" id="certificates" name="certificates" onChange={handleFileChange} accept=".pdf,.jpg,.jpeg,.png" className="hidden" />
                     <label htmlFor="certificates" className={`flex items-center justify-center w-full px-4 py-3 border-2 ${errors.certificates ? "border-red-500" : "border-gray-300"} border-dashed rounded-lg cursor-pointer hover:bg-gray-50 transition-colors`}>
@@ -440,42 +440,42 @@ export default function JoinNow(): JSX.Element {
               <div className="space-y-6">
                 <div>
                   <label htmlFor="houseAddress" className="block text-sm font-medium text-gray-700 mb-2">Residential Address *</label>
-                  <textarea id="houseAddress" name="houseAddress" value={formData.houseAddress} onChange={handleChange} rows={3} className={`w-full px-4 py-2 border ${errors.houseAddress ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent`}></textarea>
+                  <textarea id="houseAddress" name="houseAddress" value={formData.houseAddress} onChange={handleChange} rows={3} className={`w-full px-4 py-2 border ${errors.houseAddress ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent`}></textarea>
                   {errors.houseAddress && <p className="text-red-500 text-sm mt-1">{errors.houseAddress}</p>}
                 </div>
 
                 <div>
                   <label htmlFor="chamberAddress" className="block text-sm font-medium text-gray-700 mb-2">Chamber / Office Address *</label>
-                  <textarea id="chamberAddress" name="chamberAddress" value={formData.chamberAddress} onChange={handleChange} rows={3} className={`w-full px-4 py-2 border ${errors.chamberAddress ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent`}></textarea>
+                  <textarea id="chamberAddress" name="chamberAddress" value={formData.chamberAddress} onChange={handleChange} rows={3} className={`w-full px-4 py-2 border ${errors.chamberAddress ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent`}></textarea>
                   {errors.chamberAddress && <p className="text-red-500 text-sm mt-1">{errors.chamberAddress}</p>}
                 </div>
 
                 <div>
                   <label htmlFor="barCouncilId" className="block text-sm font-medium text-gray-700 mb-2">Bar Council ID *</label>
-                  <input type="text" id="barCouncilId" name="barCouncilId" value={formData.barCouncilId} onChange={handleChange} className={`w-full px-4 py-2 border ${errors.barCouncilId ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent`} />
+                  <input type="text" id="barCouncilId" name="barCouncilId" value={formData.barCouncilId} onChange={handleChange} className={`w-full px-4 py-2 border ${errors.barCouncilId ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent`} />
                   {errors.barCouncilId && <p className="text-red-500 text-sm mt-1">{errors.barCouncilId}</p>}
                 </div>
               </div>
             </div>
 
-            <div className="mb-8 bg-gray-50 p-6 rounded-xl">
+            <div className="mb-8 bg-blue-50 p-6 rounded-xl">
               <h3 className="text-xl font-bold text-gray-900 mb-4">Nominee Details</h3>
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <label htmlFor="nomineeName" className="block text-sm font-medium text-gray-700 mb-2">Nominee Name *</label>
-                  <input type="text" id="nomineeName" name="nomineeName" value={formData.nomineeName} onChange={handleChange} className={`w-full px-4 py-2 border ${errors.nomineeName ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent`} />
+                  <input type="text" id="nomineeName" name="nomineeName" value={formData.nomineeName} onChange={handleChange} className={`w-full px-4 py-2 border ${errors.nomineeName ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent`} />
                   {errors.nomineeName && <p className="text-red-500 text-sm mt-1">{errors.nomineeName}</p>}
                 </div>
 
                 <div>
                   <label htmlFor="nomineeAge" className="block text-sm font-medium text-gray-700 mb-2">Nominee Age *</label>
-                  <input type="number" id="nomineeAge" name="nomineeAge" value={formData.nomineeAge} onChange={handleChange} className={`w-full px-4 py-2 border ${errors.nomineeAge ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent`} />
+                  <input type="number" id="nomineeAge" name="nomineeAge" value={formData.nomineeAge} onChange={handleChange} className={`w-full px-4 py-2 border ${errors.nomineeAge ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent`} />
                   {errors.nomineeAge && <p className="text-red-500 text-sm mt-1">{errors.nomineeAge}</p>}
                 </div>
 
                 <div>
                   <label htmlFor="nomineeSex" className="block text-sm font-medium text-gray-700 mb-2">Nominee Sex *</label>
-                  <select id="nomineeSex" name="nomineeSex" value={formData.nomineeSex} onChange={handleChange} className={`w-full px-4 py-2 border ${errors.nomineeSex ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent`}>
+                  <select id="nomineeSex" name="nomineeSex" value={formData.nomineeSex} onChange={handleChange} className={`w-full px-4 py-2 border ${errors.nomineeSex ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent`}>
                     <option value="">Select</option>
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
@@ -486,37 +486,37 @@ export default function JoinNow(): JSX.Element {
 
                 <div>
                   <label htmlFor="nomineeEmail" className="block text-sm font-medium text-gray-700 mb-2">Nominee Email *</label>
-                  <input type="email" id="nomineeEmail" name="nomineeEmail" value={formData.nomineeEmail} onChange={handleChange} className={`w-full px-4 py-2 border ${errors.nomineeEmail ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent`} />
+                  <input type="email" id="nomineeEmail" name="nomineeEmail" value={formData.nomineeEmail} onChange={handleChange} className={`w-full px-4 py-2 border ${errors.nomineeEmail ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent`} />
                   {errors.nomineeEmail && <p className="text-red-500 text-sm mt-1">{errors.nomineeEmail}</p>}
                 </div>
 
                 <div className="md:col-span-2">
                   <label htmlFor="nomineePhone" className="block text-sm font-medium text-gray-700 mb-2">Nominee Phone *</label>
-                  <input type="tel" id="nomineePhone" name="nomineePhone" value={formData.nomineePhone} onChange={handleChange} className={`w-full px-4 py-2 border ${errors.nomineePhone ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent`} />
+                  <input type="tel" id="nomineePhone" name="nomineePhone" value={formData.nomineePhone} onChange={handleChange} className={`w-full px-4 py-2 border ${errors.nomineePhone ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent`} />
                   {errors.nomineePhone && <p className="text-red-500 text-sm mt-1">{errors.nomineePhone}</p>}
                 </div>
 
                 <div>
                   <label htmlFor="nomineeBankHolder" className="block text-sm font-medium text-gray-700 mb-2">Bank Holder Name *</label>
-                  <input type="text" id="nomineeBankHolder" name="nomineeBankHolder" value={formData.nomineeBankHolder} onChange={handleChange} className={`w-full px-4 py-2 border ${errors.nomineeBankHolder ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent`} />
+                  <input type="text" id="nomineeBankHolder" name="nomineeBankHolder" value={formData.nomineeBankHolder} onChange={handleChange} className={`w-full px-4 py-2 border ${errors.nomineeBankHolder ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent`} />
                   {errors.nomineeBankHolder && <p className="text-red-500 text-sm mt-1">{errors.nomineeBankHolder}</p>}
                 </div>
 
                 <div>
                   <label htmlFor="nomineeBankAccount" className="block text-sm font-medium text-gray-700 mb-2">Bank Account Number *</label>
-                  <input type="text" id="nomineeBankAccount" name="nomineeBankAccount" value={formData.nomineeBankAccount} onChange={handleChange} className={`w-full px-4 py-2 border ${errors.nomineeBankAccount ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent`} />
+                  <input type="text" id="nomineeBankAccount" name="nomineeBankAccount" value={formData.nomineeBankAccount} onChange={handleChange} className={`w-full px-4 py-2 border ${errors.nomineeBankAccount ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent`} />
                   {errors.nomineeBankAccount && <p className="text-red-500 text-sm mt-1">{errors.nomineeBankAccount}</p>}
                 </div>
 
                 <div>
                   <label htmlFor="nomineeBankAccountConfirm" className="block text-sm font-medium text-gray-700 mb-2">Confirm Account Number *</label>
-                  <input type="text" id="nomineeBankAccountConfirm" name="nomineeBankAccountConfirm" value={formData.nomineeBankAccountConfirm} onChange={handleChange} className={`w-full px-4 py-2 border ${errors.nomineeBankAccountConfirm ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent`} />
+                  <input type="text" id="nomineeBankAccountConfirm" name="nomineeBankAccountConfirm" value={formData.nomineeBankAccountConfirm} onChange={handleChange} className={`w-full px-4 py-2 border ${errors.nomineeBankAccountConfirm ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent`} />
                   {errors.nomineeBankAccountConfirm && <p className="text-red-500 text-sm mt-1">{errors.nomineeBankAccountConfirm}</p>}
                 </div>
 
                 <div className="md:col-span-2">
                   <label htmlFor="nomineeIFSC" className="block text-sm font-medium text-gray-700 mb-2">IFSC Code *</label>
-                  <input type="text" id="nomineeIFSC" name="nomineeIFSC" value={formData.nomineeIFSC} onChange={handleChange} className={`w-full px-4 py-2 border ${errors.nomineeIFSC ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent`} />
+                  <input type="text" id="nomineeIFSC" name="nomineeIFSC" value={formData.nomineeIFSC} onChange={handleChange} className={`w-full px-4 py-2 border ${errors.nomineeIFSC ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent`} />
                   {errors.nomineeIFSC && <p className="text-red-500 text-sm mt-1">{errors.nomineeIFSC}</p>}
                 </div>
               </div>
@@ -527,17 +527,17 @@ export default function JoinNow(): JSX.Element {
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <label htmlFor="family1Name" className="block text-sm font-medium text-gray-700 mb-2">Name</label>
-                  <input type="text" id="family1Name" name="family1Name" value={formData.family1Name} onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent" />
+                  <input type="text" id="family1Name" name="family1Name" value={formData.family1Name} onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
                 </div>
 
                 <div>
                   <label htmlFor="family1Age" className="block text-sm font-medium text-gray-700 mb-2">Age</label>
-                  <input type="number" id="family1Age" name="family1Age" value={formData.family1Age} onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent" />
+                  <input type="number" id="family1Age" name="family1Age" value={formData.family1Age} onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
                 </div>
 
                 <div>
                   <label htmlFor="family1Sex" className="block text-sm font-medium text-gray-700 mb-2">Sex</label>
-                  <select id="family1Sex" name="family1Sex" value={formData.family1Sex} onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent">
+                  <select id="family1Sex" name="family1Sex" value={formData.family1Sex} onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                     <option value="">Select</option>
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
@@ -547,17 +547,17 @@ export default function JoinNow(): JSX.Element {
 
                 <div>
                   <label htmlFor="family1Email" className="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                  <input type="email" id="family1Email" name="family1Email" value={formData.family1Email} onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent" />
+                  <input type="email" id="family1Email" name="family1Email" value={formData.family1Email} onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
                 </div>
 
                 <div>
                   <label htmlFor="family1Mobile" className="block text-sm font-medium text-gray-700 mb-2">Mobile</label>
-                  <input type="tel" id="family1Mobile" name="family1Mobile" value={formData.family1Mobile} onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent" />
+                  <input type="tel" id="family1Mobile" name="family1Mobile" value={formData.family1Mobile} onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
                 </div>
 
                 <div className="md:col-span-2">
                   <label htmlFor="family1Address" className="block text-sm font-medium text-gray-700 mb-2">Address</label>
-                  <textarea id="family1Address" name="family1Address" value={formData.family1Address} onChange={handleChange} rows={2} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"></textarea>
+                  <textarea id="family1Address" name="family1Address" value={formData.family1Address} onChange={handleChange} rows={2} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
                 </div>
               </div>
             </div>
@@ -567,17 +567,17 @@ export default function JoinNow(): JSX.Element {
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <label htmlFor="family2Name" className="block text-sm font-medium text-gray-700 mb-2">Name</label>
-                  <input type="text" id="family2Name" name="family2Name" value={formData.family2Name} onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent" />
+                  <input type="text" id="family2Name" name="family2Name" value={formData.family2Name} onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
                 </div>
 
                 <div>
                   <label htmlFor="family2Age" className="block text-sm font-medium text-gray-700 mb-2">Age</label>
-                  <input type="number" id="family2Age" name="family2Age" value={formData.family2Age} onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent" />
+                  <input type="number" id="family2Age" name="family2Age" value={formData.family2Age} onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
                 </div>
 
                 <div>
                   <label htmlFor="family2Sex" className="block text-sm font-medium text-gray-700 mb-2">Sex</label>
-                  <select id="family2Sex" name="family2Sex" value={formData.family2Sex} onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent">
+                  <select id="family2Sex" name="family2Sex" value={formData.family2Sex} onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                     <option value="">Select</option>
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
@@ -587,24 +587,24 @@ export default function JoinNow(): JSX.Element {
 
                 <div>
                   <label htmlFor="family2Email" className="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                  <input type="email" id="family2Email" name="family2Email" value={formData.family2Email} onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent" />
+                  <input type="email" id="family2Email" name="family2Email" value={formData.family2Email} onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
                 </div>
 
                 <div>
                   <label htmlFor="family2Mobile" className="block text-sm font-medium text-gray-700 mb-2">Mobile</label>
-                  <input type="tel" id="family2Mobile" name="family2Mobile" value={formData.family2Mobile} onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent" />
+                  <input type="tel" id="family2Mobile" name="family2Mobile" value={formData.family2Mobile} onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
                 </div>
 
                 <div className="md:col-span-2">
                   <label htmlFor="family2Address" className="block text-sm font-medium text-gray-700 mb-2">Address</label>
-                  <textarea id="family2Address" name="family2Address" value={formData.family2Address} onChange={handleChange} rows={2} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"></textarea>
+                  <textarea id="family2Address" name="family2Address" value={formData.family2Address} onChange={handleChange} rows={2} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
                 </div>
               </div>
             </div>
 
             <div className="mb-8 space-y-4">
               <div className="flex items-start">
-                <input type="checkbox" id="termsAccepted" name="termsAccepted" checked={formData.termsAccepted} onChange={handleChange} className="mt-1 mr-3 h-5 w-5 text-black focus:ring-gray-500 border-gray-300 rounded" />
+                <input type="checkbox" id="termsAccepted" name="termsAccepted" checked={formData.termsAccepted} onChange={handleChange} className="mt-1 mr-3 h-5 w-5 text-black focus:ring-blue-500 border-gray-300 rounded" />
                 <label htmlFor="termsAccepted" className="text-sm text-gray-700">
                   I accept the{" "}
                   <Link to="/terms" className="text-black hover:underline">
@@ -616,7 +616,7 @@ export default function JoinNow(): JSX.Element {
               {errors.termsAccepted && <p className="text-red-500 text-sm">{errors.termsAccepted}</p>}
 
               <div className="flex items-start">
-                <input type="checkbox" id="subscribe" name="subscribe" checked={formData.subscribe} onChange={handleChange} className="mt-1 mr-3 h-5 w-5 text-black focus:ring-gray-500 border-gray-300 rounded" />
+                <input type="checkbox" id="subscribe" name="subscribe" checked={formData.subscribe} onChange={handleChange} className="mt-1 mr-3 h-5 w-5 text-black focus:ring-blue-500 border-gray-300 rounded" />
                 <label htmlFor="subscribe" className="text-sm text-gray-700">I want to receive updates and newsletters *</label>
               </div>
               {errors.subscribe && <p className="text-red-500 text-sm">{errors.subscribe}</p>}

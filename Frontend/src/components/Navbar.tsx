@@ -27,8 +27,8 @@ export default function Navbar() {
   const privateLinks = isAdmin
     ? [{ path: "/admin", label: "Admin Dashboard" }]
     : [
-        { path: "/doctors", label: "Doctors" },
-        { path: "/deceased", label: "Deceased" },
+        { path: "/lawyers", label: "Lawyers" },
+        { path: "/demised", label: "Demised Lawyers" },
         { path: "/profile", label: "My Profile" },
       ];
 

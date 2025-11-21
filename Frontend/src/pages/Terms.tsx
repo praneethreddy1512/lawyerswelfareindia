@@ -8,160 +8,137 @@ export default function Terms() {
           <h1 className="text-3xl font-bold mb-4">Terms & Conditions</h1>
 
           <p className="text-gray-700 mb-4 font-semibold">
-            HEALTH CARE PROFESSIONALS SELF SUPPORT SCHEME (lawyerwelfareindia )
+            LAWYERS WELFARE SELF SUPPORT SCHEME (lawyerwelfareindia)
           </p>
 
           <p className="text-gray-700 mb-6">
-            HEALTH CARE PROFESSIONALS SELF SUPPORT SCHEME (lawyerwelfareindia )
-            was established for HEALTH CARE PROFESSIONALS and by HEALTH CARE
-            PROFESSIONALS to support them. lawyersfareindia is managed by the
-            HEALTH CARE PROFESSIONALS TRUST.
+            LAWYERS WELFARE SELF SUPPORT SCHEME (lawyerwelfareindia) was
+            established for lawyers and by lawyers to support members of the
+            legal profession. lawyerwelfareindia is managed by the Legal
+            Professionals Welfare Trust.
           </p>
 
-          <h2 className="text-xl font-semibold mb-3">
-            Main Rules (For Members)
-          </h2>
+          <h2 className="text-xl font-semibold mb-3">Main Rules (For Members)</h2>
 
           <ol className="list-decimal pl-6 space-y-3 text-gray-700 mb-6">
             <li>
-              To join lawyerwelfareindia , Doctors and Dentists may voluntarily
-              register through the website after agreeing to these terms and
-              conditions. A yearly membership fee is charged for joining the
-              scheme.
+              To join lawyerwelfareindia, advocates may voluntarily register
+              through the website after agreeing to these terms and conditions.
+              A yearly membership fee is charged for joining the scheme.
             </li>
 
             <li>
-              Maximum age to join lawyersfareindia is 60 years. Applicants older
-              than 60 will not be accepted for new membership. There is a
-              waiting (lock-in) period of 1 year from the date of registration
-              during which certain benefits may not be available. Coverage
-              (where applicable) can be provided up to the age of 75 years
-              according to the scheme rules and eligibility at the time.
+              Maximum age to join lawyerwelfareindia is 60 years. Applicants
+              above 60 will not be accepted for new membership. There is a
+              lock-in period of 1 year during which certain benefits may not be
+              available. Coverage (where applicable) can extend up to the age of
+              75 as per scheme rules.
             </li>
 
             <li>
-              Registration is mandatory and must be completed by filling out the
-              required information form. lawyersfareindia will also share
-              essential information via social media platforms, the app and the
-              website. lawyersfareindia follows the rule: only those who
-              cooperate will receive support — members are expected to send
-              support to the families of deceased members when called upon.
+              Registration is mandatory and must be completed with correct
+              details. lawyerwelfareindia will share essential information via
+              social media groups, the app, and the website. Members must
+              cooperate by contributing to families of deceased lawyers when
+              notified.
             </li>
 
             <li>
-              The lock-in period for all members is 12 months (1 year). Support
-              will not be provided if a nominee is found to be involved in
-              suicide or murder; in special circumstances the final decision
-              rests with lawyerwelfareindia . Rules will be available on the
-              website (current rules and previous versions where applicable).
+              The lock-in period for all members is 12 months. Support will not
+              be provided if a nominee is found involved in suicide, murder, or
+              fraudulent activities; final decisions rest with
+              lawyerwelfareindia.
             </li>
 
             <li>
-              lawyersfareindia may exercise discretion in decisions regarding
-              calls for contributions, including conducting due diligence on
-              legality or other matters as appropriate. Members and nominees do
-              not have a legal claim to receive contributions;
-              lawyerwelfareindia will ethically strive to secure contributions.
+              lawyerwelfareindia may exercise discretion regarding contribution
+              calls and conduct appropriate verification or due diligence.
+              Members/nominees cannot legally claim contributions. The Trust
+              will ethically attempt to secure contributions.
             </li>
 
             <li>
-              If a Doctor mistakenly sends an excess amount to a nominee's
-              account, the nominee must return the funds upon presentation of
-              appropriate evidence. lawyersfareindia will make reasonable
-              efforts to assist but cannot guarantee recovery of mistakenly
-              transferred funds.
+              If a member mistakenly sends excess funds to a nominee, the nominee
+              must return the amount upon valid evidence. lawyerwelfareindia
+              will assist but cannot guarantee recovery.
             </li>
 
             <li>
-              Making contributions is mandatory to be eligible to receive
-              contributions. After becoming a member and completing
-              contributions post lock-in period, members must upload receipts
-              via the website or a provided form as required. Failure to
-              contribute or to upload required receipts will render a member
-              ineligible to receive contributions.
+              Making contributions is mandatory to remain eligible for benefits.
+              Members must upload receipts as required. Failure to contribute or
+              upload receipts results in loss of eligibility.
             </li>
 
             <li>
-              Members who fail to cooperate may lose statutory membership
-              status. Such members can reactivate status by contributing 100% of
-              outstanding dues as defined by lawyerwelfareindia .
+              Members who do not cooperate may lose active membership. They can
+              regain status by clearing all outstanding dues.
             </li>
 
             <li>
-              Members who leave the association may regain membership in the
-              future after paying all due contributions and fees as required by
-              lawyersfareindia rules.
+              Members who leave the association may rejoin later after paying
+              pending dues and fees according to the rules.
             </li>
 
             <li>
-              In the event of the deaths of multiple members, assistance will be
-              provided in order of death date. If two or more members die on the
-              same date, priority will be given based on the percentage/average
-              of assistance as determined by lawyerwelfareindia .
-              lawyerwelfareindia may alter order in special circumstances (e.g.,
-              inability to conduct field inspection or technical limitations).
+              In the event of multiple deaths, assistance will be provided based
+              on the date of demise. If two lawyers pass away on the same date,
+              priority will be based on internal scheme calculations. Special
+              conditions may alter the order.
             </li>
 
             <li>
-              In case of any dispute regarding a nominee, the State/Core Team
-              will review and decide after due scrutiny.
+              Any nominee-related dispute will be reviewed and concluded by the
+              State/Core Team after proper verification.
             </li>
 
             <li>
-              All official information will be posted on lawyerwelfareindia 's
-              Telegram/WhatsApp group and the App; members who do not receive
-              information through these channels remain responsible for
-              obtaining it. Members can contact the helpline for queries.
+              All official information will be posted on lawyerwelfareindia’s
+              Telegram/WhatsApp group or app. Members not receiving updates must
+              still stay informed. The helpline is available for support.
             </li>
 
             <li>
-              lawyersfareindia may amend or change any rules at any time as
-              required. The copy of the rules posted on the website at the time
-              of a decision will be considered the authoritative version.
+              lawyerwelfareindia may modify or update rules at any time. The
+              version displayed on the website at the time of a decision will be
+              considered the valid copy.
             </li>
 
             <li>
-              Members make contributions directly to the nominee of the deceased
-              member; no member or third party has the right to bring judicial
-              claims for contributions. Contributions are voluntary and depend
-              on the willingness of members to give; lawyersfareindia is not
-              liable if contributions are less than expected.
+              Members deposit contributions directly to the nominee of the
+              deceased lawyer. Contributions are voluntary and are NOT legally
+              enforceable. lawyerwelfareindia is not liable if contributions
+              fall short.
             </li>
 
             <li>
-              lawyersfareindia does not coerce any Doctor to become a member.
-              Membership is voluntary and requires acceptance of these rules.
-              Members may voluntarily dissociate at any time.
+              lawyerwelfareindia does not force any lawyer to join. Membership
+              is voluntary, and members may leave anytime.
             </li>
 
             <li>
-              Members who submit forged or falsified receipts or otherwise act
-              contrary to the rules may be terminated and denied benefits;
-              lawyersfareindia is authorized to make decisions regarding such
-              cases.
+              Members who submit forged receipts, inaccurate details, or violate
+              rules may be terminated and denied benefits. lawyerwelfareindia is
+              authorized to take necessary decisions.
             </li>
 
             <li>
-              lawyersfareindia will use membership fees to support the operation
-              and services of the scheme, including website and app
-              development/operation, SMS services, office and technical support,
-              on-site inspections, membership campaigns, and adoption of
-              technology to ensure transparency and ease of process.
+              Membership fees will be used for operations including website and
+              app maintenance, SMS/communication services, inspections,
+              campaigns, and technology upgrades.
             </li>
           </ol>
 
           <p className="text-gray-700 mb-6">
-            Members give contributions directly to nominees of deceased doctors;
-            contributions do not create legal entitlements to receive equivalent
-            support. lawyersfareindia will make reasonable efforts to verify
-            contributions and compliance, but cannot guarantee any specific
-            outcome if members do not contribute.
+            Members send contributions directly to nominees of deceased lawyers.
+            Contributions do not guarantee equal or fixed support. The Trust
+            will attempt to verify contributions and maintain transparency but
+            cannot guarantee outcomes if members do not cooperate.
           </p>
 
           <p className="text-gray-700 mb-6">
-            In case of any dispute or question regarding these terms, the
-            version of the rules uploaded on the website will be the valid copy
-            and lawyersfareindia reserves the right to decide accordingly.
+            In case of disputes, the rules displayed on the website will be
+            considered final. lawyerwelfareindia reserves the right to take
+            decisions accordingly.
           </p>
 
           <div className="flex items-center space-x-4">
