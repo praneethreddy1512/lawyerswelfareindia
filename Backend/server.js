@@ -12,7 +12,7 @@ const app = express();
 
 // CORS: allow only configured frontend origin and enable credentials for cookies/auth
 const corsOptions = {
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  origin: process.env.FRONTEND_URL || 'http://localhost:5000',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
