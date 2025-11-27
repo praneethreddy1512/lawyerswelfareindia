@@ -1,5 +1,5 @@
 // Lightweight frontend API client for the backend (LAWYERS)
-const BASE = import.meta.env.VITE_BACKEND_URL;
+const BASE = import.meta.env.VITE_BACKEND_URL || "https://lawyerswelfareindia.onrender.com";
 
 function getToken() {
   return localStorage.getItem('token');
